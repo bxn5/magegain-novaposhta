@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/e
+        tc/config.xsd">
+
+    <preference for="Magegain\Novaposhta\Api\CityRepositoryInterface"
+                                    type="Magegain\Novaposhta\Model\CityRepository" />
+    <preference for="Magegain\Novaposhta\Api\Data\CityInterface" 
+                            type="Magegain\Novaposhta\Model\City" />
+    <preference for="Magegain\Novaposhta\Api\Data\CitySearchResultsInterface"
+                            type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Magegain\Novaposhta\Api\WarhouseRepositoryInterface"
+                            type="Magegain\Novaposhta\Model\WarhouseRepository" />
+    <preference for="Magegain\Novaposhta\Api\Data\WarhouseInterface" 
+                            type="Magegain\Novaposhta\Model\Warhouse" />
+    <preference for="Magegain\Novaposhta\Api\Data\WarhouseSearchResultsInterface"
+                            type="Magento\Framework\Api\SearchResults"/>
+    <virtualType name="CityGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magegain\Novaposhta\Model\ResourceModel\City\Collection</argument>
+          
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="city_listing_data_source" xsi:type="string">Magegain\Novaposhta\Model\ResourceModel\City\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="warhouseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magegain\Novaposhta\Model\ResourceModel\Warhouse\Collection</argument>
+          
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="warhouse_listing_data_source" xsi:type="string">Magegain\Novaposhta\Model\ResourceModel\Warhouse\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

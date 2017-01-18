@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magegain_Novaposhta::city_list" title="Нова пошта міста" module="Magegain_Novaposhta" sortOrder="0" parent="Magento_Sales::sales" action="novaposhta/city/index" resource="Magegain_Novaposhta::city"/>
+        <add id="Magegain_Novaposhta::warhouse_list" title="Новая почта склады" module="Magegain_Novaposhta" sortOrder="0" parent="Magento_Sales::sales" action="novaposhta/warhouse/index" resource="Magegain_Contactajax::warhouse"/>
+    </menu>
+</config>
