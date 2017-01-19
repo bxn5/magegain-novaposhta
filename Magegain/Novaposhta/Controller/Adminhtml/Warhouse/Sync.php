@@ -124,12 +124,12 @@ set_time_limit(0);
         $select = $connection->select()
     ->from(
         ['ce' => $tableName],
-        ['Ref']
+         ['Ref','id']
     );
         $res_arr =  $connection->fetchAll($select); 
         $result = [];
         for ($i=0; $i < count($res_arr); $i++) {
-            $result[$res_arr[$i]['Ref']] = '';
+               $result[$res_arr[$i]['Ref']] = $res_arr[$i]['id'];
         }
         return $result;
     }
