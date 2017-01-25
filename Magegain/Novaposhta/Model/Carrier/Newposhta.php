@@ -102,7 +102,7 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
             /* @var $warhouse object collection */
             foreach ($warhouse_collection as $warhouse) {
                 $methodTitle = ($loc == 'ru_RU') ? $warhouse->getNameRu() : $warhouse->getName();
-                $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhtavidd', 'methodTitle' => $methodTitle];
+                $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhtavidd'.$warhouse->getId(), 'methodTitle' => $methodTitle];
                 $method = $this->setShipMethod($carrierData, $amount);
                 $result->append($method);
             }
