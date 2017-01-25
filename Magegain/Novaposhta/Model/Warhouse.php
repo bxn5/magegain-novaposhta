@@ -18,7 +18,9 @@ class Warhouse extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     public function getCustomAttributesCodes() {
         return array('id', 'warhouse_name', 'warhouse_name_ru', 'city_name');
     }
-
+    public function getId() {
+        return $this->_getData('id');
+    }
     public function setCityId($city_id) {
         return $this->setData('city_id', $city_id);
     }
