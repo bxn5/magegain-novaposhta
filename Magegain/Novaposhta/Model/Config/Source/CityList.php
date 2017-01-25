@@ -2,12 +2,14 @@
 
 namespace Magegain\Novaposhta\Model\Config\Source;
 
-class CityList implements \Magento\Framework\Option\ArrayInterface {
+class CityList implements \Magento\Framework\Option\ArrayInterface
+{
 
     /**
      * {@inheritdoc}
      */
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return [
             [
                 'value' => 'Вінниця',
@@ -39,7 +41,4 @@ class CityList implements \Magento\Framework\Option\ArrayInterface {
             ],
         ];
     }
-
 }
-
-?>

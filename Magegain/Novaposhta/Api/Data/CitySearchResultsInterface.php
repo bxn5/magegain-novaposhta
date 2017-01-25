@@ -2,8 +2,8 @@
 
 namespace Magegain\Novaposhta\Api\Data;
 
-interface CitySearchResultsInterface
-extends \Magento\Framework\Api\SearchResultsInterface {
+interface CitySearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+{
 
     /**
      * @api

@@ -7,12 +7,12 @@ define([
 ], function ($, Component, ko, jqi) {
     'use strict';
     var prom = Promise.resolve(
-            $.ajax({
-                type: 'POST',
-                url: '/novaposhta/ajax/cities',
-                dataType: 'json'
+        $.ajax({
+            type: 'POST',
+            url: '/novaposhta/ajax/cities',
+            dataType: 'json'
             })
-            );
+    );
 
     //jqAuto -- main binding (should contain additional options to pass to autocomplete)
 //jqAutoSource -- the array of choices
@@ -42,12 +42,13 @@ define([
                         labelProp = allBindings.jqAutoSourceLabel || valueProp;
 
                 //function that is shared by both select and change event handlers
-                function writeValueToModel(valueToWrite) {
+                function writeValueToModel(valueToWrite)
+                {
                     if (ko.isWriteableObservable(modelValue)) {
                         modelValue(valueToWrite);
                     } else {  //write to non-observable
-                        if (allBindings['_ko_property_writers'] && allBindings['_ko_property_writers']['jqAutoValue'])
-                            allBindings['_ko_property_writers']['jqAutoValue'](valueToWrite);
+                        if (allBindings['_ko_property_writers'] && allBindings['_ko_property_writers']['jqAutoValue']) {
+                            allBindings['_ko_property_writers']['jqAutoValue'](valueToWrite); }
                     }
                 }
 
@@ -104,7 +105,7 @@ define([
                     var source = unwrap(allBindings.jqAutoSource) || [];
                     var modelValue = ko.utils.arrayFirst(source, function (item) {
                         return unwrap(item[valueProp]) === modelValue;
-                    }) || {};  //probably don't need the || {}, but just protect against a bad value          
+                    }) || {};  //probably don't need the || {}, but just protect against a bad value
                 }
 
                 //update the element with the value that should be shown in the input
@@ -112,7 +113,8 @@ define([
             }
         };
     });
-    function City(name) {
+    function City(name)
+    {
         this.name = ko.observable(name);
 
 

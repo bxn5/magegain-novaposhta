@@ -8,12 +8,12 @@ define(
     function () {
         "use strict";
         return {
-            getRules: function() {
+            getRules: function () {
                 return {
                     'postcode': {
                         'required': false
                     },
-                     'city': {
+                    'city': {
                         'required': true
                     }
                 };

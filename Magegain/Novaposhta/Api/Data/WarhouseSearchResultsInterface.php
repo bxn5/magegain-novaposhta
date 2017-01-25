@@ -2,8 +2,8 @@
 
 namespace Magegain\Novaposhta\Api\Data;
 
-interface WarhouseSearchResultsInterface
-extends \Magento\Framework\Api\SearchResultsInterface {
+interface WarhouseSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+{
 
     /**
      * @api

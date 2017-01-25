@@ -2,12 +2,14 @@
 
 namespace Magegain\Novaposhta\Model\Config\Source;
 
-class WeightUnit implements \Magento\Framework\Option\ArrayInterface {
+class WeightUnit implements \Magento\Framework\Option\ArrayInterface
+{
 
     /**
      * {@inheritdoc}
      */
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return [
             [
                 'value' => 'kg',
@@ -19,7 +21,4 @@ class WeightUnit implements \Magento\Framework\Option\ArrayInterface {
             ]
         ];
     }
-
 }
-
-?>

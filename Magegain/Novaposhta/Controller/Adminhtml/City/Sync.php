@@ -13,7 +13,8 @@ use Magento\Framework\View\Result\PageFactory;
 use Magegain\Novaposhta\Api\CityRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-class Sync extends \Magento\Backend\App\Action {
+class Sync extends \Magento\Backend\App\Action
+{
 
     /**
      * @var PageFactory
@@ -30,19 +31,19 @@ class Sync extends \Magento\Backend\App\Action {
     /**
      * @var \Magento\Framework\HTTP\ZendClientFactory
      */
-    protected $_httpClientFactory;
+    private $_httpClientFactory;
 
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        Context $context, 
-        PageFactory $resultPageFactory, 
-        CityRepositoryInterface $cityRepository, 
-        \Magegain\Novaposhta\Model\CityFactory $cityFactory, 
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory, 
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder, 
+        Context $context,
+        PageFactory $resultPageFactory,
+        CityRepositoryInterface $cityRepository,
+        \Magegain\Novaposhta\Model\CityFactory $cityFactory,
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
@@ -59,7 +60,8 @@ class Sync extends \Magento\Backend\App\Action {
      *
      * @return bool
      */
-    protected function _isAllowed() {
+    protected function _isAllowed()
+    {
         return $this->_authorization->isAllowed('Magento_Cms::page');
     }
 
@@ -68,18 +70,20 @@ class Sync extends \Magento\Backend\App\Action {
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function execute() {
+    public function execute()
+    {
 
         $citiesApiJson = $this->_getCitiesFromServer();
         $citiesApi = json_decode($citiesApiJson);
         if (property_exists($citiesApi, 'success') && $citiesApi->success === true) {
             $this->_syncWithDb($citiesApi->data);
             $this->messageManager->addSuccess(
-                    __('Успешно синхронизировано'));
+                __('Успешно синхронизировано')
+            );
             $this->_redirect('novaposhta/city/index');
         } else {
             $this->messageManager->addError(
-                    __('Новая почта не отвечет или отвечает не правльно')
+                __('Новая почта не отвечет или отвечает не правльно')
             );
             $this->messageManager->addError($citiesApi->message);
             $this->_redirect('novaposhta/city/index');
@@ -89,10 +93,11 @@ class Sync extends \Magento\Backend\App\Action {
     /**
      * Get cities from api
      *
-     * 
+     *
      * @return json
      */
-    protected function _getCitiesFromServer() {
+    private function _getCitiesFromServer()
+    {
         $apiKey = $this->scopeConfig->getValue('carriers/newposhta/apikey', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $client = $this->_httpClientFactory->create();
         $client->setUri('http://testapi.novaposhta.ua/v2.0/json/Address/getCities');
@@ -102,7 +107,8 @@ class Sync extends \Magento\Backend\App\Action {
         return $client->request(\Zend_Http_Client::POST)->getBody();
     }
 
-    protected function _syncWithDb($citiesApi) {
+    private function _syncWithDb($citiesApi)
+    {
         $currentCitiesIds = $this->_getCitiesIdArray();
         foreach ($citiesApi as $key => $cityApi) {
             $cityApiId = $cityApi->CityID;
@@ -114,7 +120,8 @@ class Sync extends \Magento\Backend\App\Action {
         }
     }
 
-    private function _getCitiesIdArray() {
+    private function _getCitiesIdArray()
+    {
         $citiesCollection = $this->_getCitiesCollection();
         $idsArray = [];
         foreach ($citiesCollection as $key => $city_model) {
@@ -123,13 +130,15 @@ class Sync extends \Magento\Backend\App\Action {
         return $idsArray;
     }
 
-    protected function _getCitiesCollection() {
+    protected function _getCitiesCollection()
+    {
         return $this->cityRepository->getList(
-                        $this->searchCriteriaBuilder->create()
-                )->getItems();
+            $this->searchCriteriaBuilder->create()
+        )->getItems();
     }
 
-    private function _addNewCity($cityApi) {
+    private function _addNewCity($cityApi)
+    {
         $modelCity = $this->cityFactory->create();
         $modelCity->setCityId($cityApi->CityID);
         $modelCity->setCityName($cityApi->Description);
@@ -137,5 +146,4 @@ class Sync extends \Magento\Backend\App\Action {
         $modelCity->setRef($cityApi->Ref);
         $this->cityRepository->save($modelCity);
     }
-
 }

@@ -40,9 +40,14 @@ class CityRepository implements CityRepositoryInterface
     private $searchResultsFactory;
 
     public function __construct(
-        CityResource $cityResource, CityFactory $cityFactory, CollectionFactory $collectionFactory, CitySearchResultsInterfaceFactory $searchResultsFactory, Collection $citycollection, CityDataFactory $cityDataFactory
-    )
-    {
+        CityResource $cityResource,
+        CityFactory $cityFactory,
+        CollectionFactory $collectionFactory,
+        CitySearchResultsInterfaceFactory $searchResultsFactory,
+        Collection $citycollection,
+        CityDataFactory $cityDataFactory
+    ) {
+    
         $this->cityResource = $cityResource;
         $this->cityFactory = $cityFactory;
         $this->collectionFactory = $collectionFactory;
@@ -77,8 +82,8 @@ class CityRepository implements CityRepositoryInterface
 
     private function convertCollectionToDataItemsArray(
         Collection $collection
-    )
-    {
+    ) {
+    
         $examples = array_map(function (City $city) {
             /** @var ExampleInterface $dataObject */
             $dataObject = $this->cityDataFactory->create();
@@ -93,9 +98,10 @@ class CityRepository implements CityRepositoryInterface
     }
 
     private function addFilterGroupToCollection(
-        FilterGroup $filterGroup, Collection $collection
-    )
-    {
+        FilterGroup $filterGroup,
+        Collection $collection
+    ) {
+    
         $fields = [];
         $conditions = [];
         foreach ($filterGroup->getFilters() as $filter) {
@@ -111,50 +117,57 @@ class CityRepository implements CityRepositoryInterface
     }
 
     private function applySearchCriteriaToCollection(
-        SearchCriteriaInterface $searchCriteria, Collection $collection
-    )
-    {
+        SearchCriteriaInterface $searchCriteria,
+        Collection $collection
+    ) {
+    
         $this->applySearchCriteriaFiltersToCollection(
-            $searchCriteria, $collection
+            $searchCriteria,
+            $collection
         );
         $this->applySearchCriteriaSortOrdersToCollection(
-            $searchCriteria, $collection
+            $searchCriteria,
+            $collection
         );
         $this->applySearchCriteriaPagingToCollection(
-            $searchCriteria, $collection
+            $searchCriteria,
+            $collection
         );
     }
 
     private function applySearchCriteriaFiltersToCollection(
-        SearchCriteriaInterface $searchCriteria, Collection $collection
-    )
-    {
+        SearchCriteriaInterface $searchCriteria,
+        Collection $collection
+    ) {
+    
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
     }
 
     private function applySearchCriteriaSortOrdersToCollection(
-        SearchCriteriaInterface $searchCriteria, Collection $collection
-    )
-    {
+        SearchCriteriaInterface $searchCriteria,
+        Collection $collection
+    ) {
+    
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
             $isAscending = $sortOrders->getDirection() == SearchCriteriaInterface::SORT_ASC;
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
-                    $sortOrder->getField(), $isAscending ? 'ASC' : 'DESC'
+                    $sortOrder->getField(),
+                    $isAscending ? 'ASC' : 'DESC'
                 );
             }
         }
     }
 
     private function applySearchCriteriaPagingToCollection(
-        SearchCriteriaInterface $searchCriteria, Collection $collection
-    )
-    {
+        SearchCriteriaInterface $searchCriteria,
+        Collection $collection
+    ) {
+    
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
     }
-
 }

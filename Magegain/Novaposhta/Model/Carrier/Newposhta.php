@@ -11,7 +11,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
-\Magento\Shipping\Model\Carrier\CarrierInterface {
+    \Magento\Shipping\Model\Carrier\CarrierInterface
+{
 
     /**
      * @var string
@@ -32,18 +33,18 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param array $data
      */
     public function __construct(
-    \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-            \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory, 
-            \Psr\Log\LoggerInterface $logger, 
-            \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory, 
-            \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory, 
-            WarhouseRepositoryInterface $warhouseRepository, 
-            Resolver $resolver, 
-            FilterBuilder $filterBuilder, 
-            \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder, 
-            CityRepositoryInterface $cityRepository, 
-            \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory, 
-            array $data = []
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        WarhouseRepositoryInterface $warhouseRepository,
+        Resolver $resolver,
+        FilterBuilder $filterBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        CityRepositoryInterface $cityRepository,
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        array $data = []
     ) {
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
@@ -60,7 +61,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     /**
      * @return array
      */
-    public function getAllowedMethods() {
+    public function getAllowedMethods()
+    {
         return ['newposhta' => $this->getConfigData('name')];
     }
 
@@ -68,14 +70,15 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param RateRequest $request
      * @return bool|Result
      */
-    public function collectRates(RateRequest $request) {
+    public function collectRates(RateRequest $request)
+    {
         if (!$this->getConfigFlag('active')) {
             return false;
         }
         $senderCity = $this->scopeConfig->getValue('carriers/newposhta/citylist', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $weightUnit = $this->scopeConfig->getValue('carriers/newposhta/weightunit', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $city = $request->getDestCity();
-        if ($city == NULL) {
+        if ($city == null) {
             return false;
         }
         $loc = $this->resolver->getLocale();
@@ -94,8 +97,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 ->create();
         $this->searchCriteriaBuilder->addFilters([$filters]);
         $warhouse_collection = $this->warhouseRepository->getList(
-                        $this->searchCriteriaBuilder->create()
-                )->getItems();
+            $this->searchCriteriaBuilder->create()
+        )->getItems();
         $result = $this->_rateResultFactory->create();
         /** @var \Magento\Shipping\Model\Rate\Result $result */
         if (count($warhouse_collection) < 50) {
@@ -119,7 +122,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         return $result;
     }
 
-    private function getCityByName($name, $loc) {
+    private function getCityByName($name, $loc)
+    {
         $fied_name = ($loc == 'ru_RU') ? 'city_name_ru' : 'city_name';
         $filters = $this->filterBuilder
                 ->setConditionType('eq')
@@ -128,8 +132,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 ->create();
         $this->searchCriteriaBuilder->addFilters([$filters]);
         $city = $this->cityRepository->getList(
-                        $this->searchCriteriaBuilder->create()
-                )->getItems();
+            $this->searchCriteriaBuilder->create()
+        )->getItems();
         if (count($city) > 0) {
             reset($city);
             $first_key = key($city);
@@ -140,13 +144,13 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /** @var $carrierData array of carrier information */
-    private function setShipMethod(array $carrierData, $price) {
+    private function setShipMethod(array $carrierData, $price)
+    {
         $method = $this->_rateMethodFactory->create();
         $method->setCarrier('newposhta');
         if ($price == 0) {
             $err = __('Помилка розрахунку вартостi');
-        }
-        else {
+        } else {
             $err = '';
         }
         $method->setCarrierTitle($carrierData['carrierTitle']. ' '. $err);
@@ -157,7 +161,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         return $method;
     }
 
-    private function _calculatePrice($senderCityModel, $cityModel, $shippingWeight, $weightUnit, $subtotal, $serviceType) {
+    private function _calculatePrice($senderCityModel, $cityModel, $shippingWeight, $weightUnit, $subtotal, $serviceType)
+    {
         $apiKey = $this->scopeConfig->getValue('carriers/newposhta/apikey', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $weight = ($weightUnit == 'kg') ? $shippingWeight : $shippingWeight / 1000;
         $client = $this->_httpClientFactory->create();
@@ -172,5 +177,4 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
             return 0;
         }
     }
-
 }

@@ -35,14 +35,14 @@ class Cities extends \Magento\Framework\App\Action\Action
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        Context $context, 
+        Context $context,
         CityRepositoryInterface $cityRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder, 
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory, 
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         Resolver $resolver,
         FilterBuilder $filterBuilder
-    )
-    {
+    ) {
+    
         parent::__construct($context);
         $this->cityRepository = $cityRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -76,5 +76,4 @@ class Cities extends \Magento\Framework\App\Action\Action
             $this->searchCriteriaBuilder->create()
         )->getItems();
     }
-
 }

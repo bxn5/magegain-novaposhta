@@ -4,18 +4,21 @@ namespace Magegain\Novaposhta\Model\ResourceModel\Warhouse;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements SearchResultInterface {
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements SearchResultInterface
+{
 
     protected $_idFieldName = 'main_table.id';
 
-    protected function _construct() {
+    protected function _construct()
+    {
         $this->_init('Magegain\Novaposhta\Model\Warhouse', 'Magegain\Novaposhta\Model\ResourceModel\Warhouse');
     }
 
     /**
      * @return AggregationInterface
      */
-    public function getAggregations() {
+    public function getAggregations()
+    {
         return $this->aggregations;
     }
 
@@ -23,7 +26,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param AggregationInterface $aggregations
      * @return $this
      */
-    public function setAggregations($aggregations) {
+    public function setAggregations($aggregations)
+    {
         $this->aggregations = $aggregations;
     }
 
@@ -32,7 +36,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
      */
-    public function getSearchCriteria() {
+    public function getSearchCriteria()
+    {
         return null;
     }
 
@@ -43,11 +48,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null) {
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    {
         return $this;
     }
 
-    protected function _renderFiltersBefore() {
+    protected function _renderFiltersBefore()
+    {
         $joinTable = $this->getTable('novaposhta_cities');
         $this->getSelect()->join($joinTable . ' as city', 'main_table.city_id = city.id', array('city.city_name'));
         parent::_renderFiltersBefore();
@@ -58,7 +65,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return int
      */
-    public function getTotalCount() {
+    public function getTotalCount()
+    {
         return $this->getSize();
     }
 
@@ -69,7 +77,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setTotalCount($totalCount) {
+    public function setTotalCount($totalCount)
+    {
         return $this;
     }
 
@@ -80,8 +89,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null) {
+    public function setItems(array $items = null)
+    {
         return $this;
     }
-
 }

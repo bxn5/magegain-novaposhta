@@ -8,7 +8,8 @@
 
 namespace Magegain\Novaposhta\Api\Data;
 
-interface WarhouseInterface {
+interface WarhouseInterface
+{
 
     public function setCityId($city_id);
 
