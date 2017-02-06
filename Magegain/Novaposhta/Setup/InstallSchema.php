@@ -26,7 +26,7 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         /**
-         * Create table 'customer_entity'
+         * Create table 'novaposhta_cities'
          */
         $table = $installer->getConnection()->newTable(
             $installer->getTable('novaposhta_cities')
