@@ -114,7 +114,7 @@ class Sync extends \Magento\Backend\App\Action
             if (isset($currentWarhouses[$warhouseItemApi->Ref])) {
                 continue;
             } else {
-                $cityID = $citiesRefArray[$warhouseItemApi->CityRef] ?? false;
+                $cityID = ($citiesRefArray[$warhouseItemApi->CityRef] ? $citiesRefArray[$warhouseItemApi->CityRef] : false);
                 if ($cityID === false) {
                     $this->messageManager->addError(__('Для одного из отделений не найден город, пожалуйста синхронизируйте сперва города '));
                     continue;
