@@ -27,8 +27,13 @@ class Cities extends \Magento\Framework\App\Action\Action
     private $resolver;
 
     /**
+     * Cities constructor.
      * @param Context $context
-     * @param PageFactory $resultPageFactory
+     * @param CityRepositoryInterface $cityRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param Resolver $resolver
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         Context $context,
@@ -60,8 +65,9 @@ class Cities extends \Magento\Framework\App\Action\Action
         $to_json = [];
         $loc = $this->resolver->getLocale();
         foreach ($cities as $key => $city) {
-
-            $to_json[] = ($loc == 'ru_RU') ? $city->getCityNameRu() : $city->getCityName();
+           // $to_json[] = ($loc == 'ru_RU') ? $city->getCityNameRu() : $city->getCityName();
+            $cityName = ($loc == 'ru_RU') ? $city->getCityNameRu() : $city->getCityName();
+            $to_json[] = ['label'=>$cityName,'value' => $key];
         }
         return $this->resultJsonFactory->create()->setData(json_encode($to_json));
     }

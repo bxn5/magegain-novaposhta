@@ -36,6 +36,11 @@ class Sync extends \Magento\Backend\App\Action
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @param CityRepositoryInterface $cityRepository
+     * @param \Magegain\Novaposhta\Model\CityFactory $cityFactory
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,

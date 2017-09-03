@@ -18,21 +18,62 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @var string
      */
     protected $_code = 'newposhta';
+
+    /**
+     * @var CityRepositoryInterface
+     */
     private $cityRepository;
+
+    /**
+     * @var Resolver
+     */
     private $resolver;
+
+    /**
+     * @var FilterBuilder
+     */
     private $filterBuilder;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     private $scopeConfig;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
+
+    /**
+     * @var \Magento\Customer\Model\Address
+     */
+    private  $modelAdress;
+
+    /**
+     * Newposhta constructor.
+     * @param \Magento\Customer\Model\Address $modelAdress
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param WarhouseRepositoryInterface $warhouseRepository
+     * @param Resolver $resolver
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CityRepositoryInterface $cityRepository
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
      */
     public function __construct(
+        \Magento\Customer\Model\Address $modelAdress,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
@@ -46,6 +87,8 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = []
     ) {
+        $this->modelAdress =  $modelAdress;
+        $this->customerSession = $customerSession;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
         $this->warhouseRepository = $warhouseRepository;
@@ -79,7 +122,15 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $weightUnit = $this->scopeConfig->getValue('carriers/newposhta/weightunit', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $city = $request->getDestCity();
         if ($city == null) {
-            return false;
+            $billingID =  $this->customerSession->getCustomer()->getDefaultBilling();
+            $address = $this->modelAdress->load($billingID);
+            $data = $address->getData();
+            if (isset($data['city'])) {
+                $city = $data['city'];
+            }
+            else {
+               return false;
+            }
         }
         $loc = $this->resolver->getLocale();
         $cityModel = $this->getCityByName($city, $loc);
@@ -90,31 +141,13 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $shippingWeight = $request->getPackageWeight();
         $subtotal = $request->getBaseSubtotalInclTax();
         $amount = $this->_calculatePrice($senderCityModel, $cityModel, $shippingWeight, $weightUnit, $subtotal, 'WarehouseWarehouse');
-        $filters = $this->filterBuilder
-                ->setConditionType('eq')
-                ->setField('main_table.city_id')
-                ->setValue($cityModel->getId())
-                ->create();
-        $this->searchCriteriaBuilder->addFilters([$filters]);
-        $warhouse_collection = $this->warhouseRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        )->getItems();
+
         $result = $this->_rateResultFactory->create();
-        /** @var \Magento\Shipping\Model\Rate\Result $result */
-        if (count($warhouse_collection) < 50) {
-            /* @var $warhouse object collection */
-            foreach ($warhouse_collection as $warhouse) {
-                $methodTitle = ($loc == 'ru_RU') ? $warhouse->getNameRu() : $warhouse->getName();
-                $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhtavidd'.$warhouse->getId(), 'methodTitle' => $methodTitle];
-                $method = $this->setShipMethod($carrierData, $amount);
-                $result->append($method);
-            }
-        } else {
-            $title = __('Доставка до отделения(номер укажите в коментарии к заказу)');
-            $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhtabig', 'methodTitle' => $title];
+            $title = __('Доставка до отделения');
+            $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhta', 'methodTitle' => $title];
             $method = $this->setShipMethod($carrierData, $amount);
             $result->append($method);
-        }
+
         $toHomeAmount = $this->_calculatePrice($senderCityModel, $cityModel, $shippingWeight, $weightUnit, $subtotal, 'WarehouseDoors');
         $carrierData = ['carrierTitle' => __('Новая почта'), 'methodCode' => 'newposhtahome', 'methodTitle' => __('Доставка на дом')];
         $method = $this->setShipMethod($carrierData, $toHomeAmount);
@@ -143,7 +176,11 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         }
     }
 
-    /** @var $carrierData array of carrier information */
+    /**
+     * @var $carrierData array of carrier information
+     * @param $price
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
+     */
     private function setShipMethod(array $carrierData, $price)
     {
         $method = $this->_rateMethodFactory->create();
@@ -171,6 +208,9 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         $client->setRawData(utf8_encode(json_encode($request)));
         $response = json_decode($client->request(\Zend_Http_Client::POST)->getBody());
+        if (!is_object($response)) {
+            return false;
+        }
         if ($response->success === true) {
             return $response->data[0]->Cost;
         } else {

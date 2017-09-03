@@ -160,4 +160,8 @@ class WarhouseRepository implements WarhouseRepositoryInterface
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
     }
+    public function getWarhouseByCity($postcode, $city)
+    {
+        return ['df','fd'];
+    }
 }

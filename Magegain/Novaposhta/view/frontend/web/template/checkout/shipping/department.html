@@ -1,0 +1,22 @@
+
+<div id="carrier-office-list-wrapper" data-bind="visible: selectedMethod() == 'newposhta'">
+    Отделение новой почты
+    <input name="carrier_department" data-bind="deAutoComplete: {
+        selected: selectedDepartment,
+        options: getDepartments
+    },
+    event: {change: userChanges},
+    value: value,
+    hasFocus: focused,
+    valueUpdate: valueUpdate,
+    attr: {
+        name: 'carrier_department',
+        placeholder: placeholder,
+        'aria-describedby': noticeId,
+        id: 'carrier_department',
+        disabled: disabled
+}" />
+</div>
+
+
+<!-- additional conteCities

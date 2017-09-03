@@ -57,7 +57,7 @@ class CityRepository implements CityRepositoryInterface
     }
 
     /**
-     * @param \Magegain\Novaposta\Api\Data\CityInterface $city
+     * @param \Magegain\Novaposhta\Api\Data\CityInterface|\Magegain\Novaposta\Api\Data\CityInterface $city
      * @return int
      */
     public function save(\Magegain\Novaposhta\Api\Data\CityInterface $city)
@@ -66,11 +66,13 @@ class CityRepository implements CityRepositoryInterface
         return $city->getId();
     }
 
+    /**
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return \Magegain\Novaposhta\Api\Data\CitySearchResultsInterface
+     */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var ExampleCollection $collection */
         $collection = $this->cityFactory->create()->getCollection();
-        /** @var ExampleSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $this->applySearchCriteriaToCollection($searchCriteria, $collection);
@@ -80,12 +82,15 @@ class CityRepository implements CityRepositoryInterface
         return $searchResults;
     }
 
+    /**
+     * @param Collection $collection
+     * @return array
+     */
     private function convertCollectionToDataItemsArray(
         Collection $collection
     ) {
     
         $examples = array_map(function (City $city) {
-            /** @var ExampleInterface $dataObject */
             $dataObject = $this->cityDataFactory->create();
             $dataObject->setId($city->getId());
             $dataObject->setCityId($city->getCityId());
@@ -97,6 +102,10 @@ class CityRepository implements CityRepositoryInterface
         return $examples;
     }
 
+    /**
+     * @param FilterGroup $filterGroup
+     * @param Collection $collection
+     */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,
         Collection $collection

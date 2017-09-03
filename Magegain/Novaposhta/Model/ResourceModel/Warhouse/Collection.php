@@ -24,7 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @param AggregationInterface $aggregations
-     * @return $this
+     * @return void
      */
     public function setAggregations($aggregations)
     {

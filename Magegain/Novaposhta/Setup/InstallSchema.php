@@ -104,6 +104,25 @@ class InstallSchema implements InstallSchemaInterface
             'warhouses from api'
         );
         $installer->getConnection()->createTable($table);
+
+
+
+        $eavTable = $installer->getTable('quote_address');
+
+        $columns = [
+            'carrier_department' => [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'nullable' => false,
+                'comment' => 'novaposhta viddilennya',
+            ],
+
+        ];
+
+        $connection = $installer->getConnection();
+        foreach ($columns as $name => $definition) {
+            $connection->addColumn($eavTable, $name, $definition);
+        }
+
         $installer->endSetup();
     }
 }

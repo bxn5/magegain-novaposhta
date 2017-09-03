@@ -42,5 +42,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="inpost-address" type="Magegain\Novaposhta\Model\Quote\AddressPlugin" sortOrder="1" disabled="false"/>
+    </type>
 
 </config>

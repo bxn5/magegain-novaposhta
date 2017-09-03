@@ -1,11 +1,9 @@
 
 <input class="input-text" type="text" data-bind="
-    jqAuto: { autoFocus: true }, 
-    jqAutoSource: myCities, 
-    jqAutoValue: mySelectedGuid, 
-    jqAutoSourceLabel: 'displayName',
-    jqAutoSourceInputValue: 'name',
-    jqAutoSourceValue: 'guid',
+    shippingAutoComplete: {
+        selected: selectedCity,
+    },
+    event: {change: userChanges},
     value: value,
     valueUpdate: 'blur',
     hasFocus: focused,

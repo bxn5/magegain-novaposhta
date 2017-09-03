@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <!-- Managing InPost Machines on Checkout page -->
+    <route url="/V1/module/get-office-list/:postcode/:city" method="GET">
+        <service class="Magegain\Novaposhta\Api\WarhouseRepositoryInterface" method="getWarhouseByCity"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>
