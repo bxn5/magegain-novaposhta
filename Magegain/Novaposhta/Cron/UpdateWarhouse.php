@@ -2,31 +2,31 @@
 
 namespace Magegain\Novaposhta\Cron;
 
-use Magegain\Novaposhta\Controller\Adminhtml\Warhouse\Sync as WarhouseSync;
+use Magegain\Novaposhta\Controller\Adminhtml\Warehouse\Sync as WarehouseSync;
 use Magegain\Novaposhta\Controller\Adminhtml\City\Sync as CitySync;
 
-class UpdateWarhouse
+class UpdateWarehouse
 {
     /**
-     * @var WarhouseSync
+     * @var WarehouseSync
      */
-    private $warhousesUpdater;
+    private $warehousesUpdater;
     /**
      * @var CitySync
      */
     private $citiesUpdater;
 
     /**
-     * UpdateWarhouse constructor.
-     * @param WarhouseSync $warhouseSync
+     * UpdateWarehouse constructor.
+     * @param WarehouseSync $warehouseSync
      * @param CitySync $citySync
      */
     public function __construct(
-        WarhouseSync $warhouseSync,
+        WarehouseSync $warehouseSync,
         CitySync $citySync
     ) {
         $this->citiesUpdater = $citySync;
-        $this->warhousesUpdater = $warhouseSync;
+        $this->warehousesUpdater = $warehouseSync;
     }
 
     /**
@@ -35,6 +35,6 @@ class UpdateWarhouse
      */
     public function execute() {
         $this->citiesUpdater->execute();
-        $this->warhousesUpdater->execute();
+        $this->warehousesUpdater->execute();
     }
 }
