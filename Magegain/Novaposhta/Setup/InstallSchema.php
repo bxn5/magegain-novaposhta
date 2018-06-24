@@ -1,8 +1,5 @@
 <?php
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+
 namespace Magegain\Novaposhta\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -15,8 +12,9 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements InstallSchemaInterface
 {
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param SchemaSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @throws \Zend_Db_Exception
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -65,47 +63,6 @@ class InstallSchema implements InstallSchemaInterface
             'cities from api'
         );
         $installer->getConnection()->createTable($table);
-
-
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('novaposhta_warhouse')
-        )->addColumn(
-            'id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'Entity Id'
-        )->addColumn(
-            'city_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [ 'nullable' => false, ],
-            'api Id'
-        )
-        ->addColumn(
-            'warhouse_name',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'name of the city'
-        )->addColumn(
-            'warhouse_name_ru',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'name ru'
-        )->addColumn(
-            'ref',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'ref'
-        )->setComment(
-            'warhouses from api'
-        );
-        $installer->getConnection()->createTable($table);
-
-
 
         $eavTable = $installer->getTable('quote_address');
 

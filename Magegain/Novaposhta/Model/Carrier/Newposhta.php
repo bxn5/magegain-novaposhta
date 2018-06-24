@@ -4,7 +4,7 @@ namespace Magegain\Novaposhta\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Rate\Result;
-use Magegain\Novaposhta\Api\WarhouseRepositoryInterface;
+use Magegain\Novaposhta\Api\WarehouseRepositoryInterface;
 use Magegain\Novaposhta\Api\CityRepositoryInterface;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Api\FilterBuilder;
@@ -63,7 +63,7 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
-     * @param WarhouseRepositoryInterface $warhouseRepository
+     * @param WarehouseRepositoryInterface $warehouseRepository
      * @param Resolver $resolver
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -79,7 +79,7 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
-        WarhouseRepositoryInterface $warhouseRepository,
+        WarehouseRepositoryInterface $warehouseRepository,
         Resolver $resolver,
         FilterBuilder $filterBuilder,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -91,7 +91,7 @@ class Newposhta extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $this->customerSession = $customerSession;
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
-        $this->warhouseRepository = $warhouseRepository;
+        $this->warehouseRepository = $warehouseRepository;
         $this->resolver = $resolver;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;

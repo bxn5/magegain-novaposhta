@@ -2,14 +2,13 @@
 namespace Magegain\Novaposhta\Controller\Ajax;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 use Magegain\Novaposhta\Api\CityRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magegain\Novaposhta\Model\CityFactory;
-use Magegain\Novaposhta\Api\WarhouseRepositoryInterface;
+use Magegain\Novaposhta\Api\WarehouseRepositoryInterface;
 
 class Departments extends \Magento\Framework\App\Action\Action
 {
@@ -45,9 +44,9 @@ class Departments extends \Magento\Framework\App\Action\Action
     private $loc;
 
     /**
-     * @var WarhouseRepositoryInterface
+     * @var
      */
-    private $warhouseRepository;
+    private $warehouseRepository;
 
     /**
      * @var FilterGroupBuilder
@@ -73,8 +72,10 @@ class Departments extends \Magento\Framework\App\Action\Action
      * @param Resolver $resolver
      * @param FilterBuilder $filterBuilder
      * @param CityFactory $cityFactory
-     * @param WarhouseRepositoryInterface $warhouseRepository
+     * @param WarehouseRepositoryInterface $warehouseRepository
      * @param FilterGroupBuilder $filterGroup
+     * @param \Magento\Customer\Model\Address $modelAdress
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         Context $context,
@@ -84,7 +85,7 @@ class Departments extends \Magento\Framework\App\Action\Action
         Resolver $resolver,
         FilterBuilder $filterBuilder,
         CityFactory $cityFactory,
-        WarhouseRepositoryInterface $warhouseRepository,
+        WarehouseRepositoryInterface $warehouseRepository,
         FilterGroupBuilder $filterGroup,
         \Magento\Customer\Model\Address $modelAdress,
         \Magento\Customer\Model\Session $customerSession
@@ -98,7 +99,7 @@ class Departments extends \Magento\Framework\App\Action\Action
         $this->filterBuilder = $filterBuilder;
         $this->cityFactory = $cityFactory;
         $this->loc = $resolver->getLocale();
-        $this->warhouseRepository = $warhouseRepository;
+        $this->warehouseRepository = $warehouseRepository;
         $this->filterGroup = $filterGroup;
         $this->modelAdress =  $modelAdress;
         $this->customerSession = $customerSession;
@@ -114,24 +115,26 @@ class Departments extends \Magento\Framework\App\Action\Action
     {
 
 
-        $warhouses = $this->_getWhCollection();
+        $warehouses = $this->_getWhCollection();
         $to_json = [];
         $loc = $this->loc;
-        foreach ($warhouses as $key => $wh) {
+        foreach ($warehouses as $key => $wh) {
             $to_json[] = ($loc == 'ru_RU') ? $wh->getNameRu() : $wh->getName();
         }
         return $this->resultJsonFactory->create()->setData(json_encode($to_json));
     }
 
     /**
+     * return warehouse collection
      * @return mixed
      */
     protected function _getWhCollection()
     {
-        $post = json_decode(file_get_contents('php://input'));
-        $fied_name = ($this->loc == 'ru_RU') ? 'city_name_ru' : 'city_name';
+        $postData = json_decode(file_get_contents('php://input'));
+        $fieldName = ($this->loc == 'ru_RU') ? 'city_name_ru' : 'city_name';
+
         $cityColl = $this->cityFactory->create()->getCollection();
-        $city = $post->city;
+        $city = $postData->city;
         if ($city == '') {
             $billingID =  $this->customerSession->getCustomer()->getDefaultBilling();
             $address = $this->modelAdress->load($billingID);
@@ -140,17 +143,19 @@ class Departments extends \Magento\Framework\App\Action\Action
                 $city = $data['city'];
             }
         }
-        $cityColl->addFieldToFilter($fied_name, $city);
+
+        $cityColl->addFieldToFilter($fieldName, $city);
         $filters[] = $this->filterBuilder
             ->setConditionType('eq')
             ->setField('main_table.city_id')
             ->setValue($cityColl->getFirstItem()->getId())
             ->create();
-        $whnameField = ($this->loc == 'ru_RU') ? 'warhouse_name_ru' : 'warhouse_name';
+
+        $whnameField = ($this->loc == 'ru_RU') ? 'warehouse_name_ru' : 'warehouse_name';
         $filters[] = $this->filterBuilder
             ->setConditionType('like')
             ->setField($whnameField)
-            ->setValue('%'. $post->q.'%')
+            ->setValue('%'. $postData->q.'%')
             ->create();
         $filter_group = [
             $this->filterGroup
@@ -162,7 +167,7 @@ class Departments extends \Magento\Framework\App\Action\Action
         ];
 
         $this->searchCriteriaBuilder->setFilterGroups($filter_group);
-        return $this->warhouseRepository->getList(
+        return $this->warehouseRepository->getList(
             $this->searchCriteriaBuilder->create()
         )->getItems();
     }

@@ -4,7 +4,7 @@
 
     <!-- Managing InPost Machines on Checkout page -->
     <route url="/V1/module/get-office-list/:postcode/:city" method="GET">
-        <service class="Magegain\Novaposhta\Api\WarhouseRepositoryInterface" method="getWarhouseByCity"/>
+        <service class="Magegain\Novaposhta\Api\WarehouseRepositoryInterface" method="getWarehouseByCity"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

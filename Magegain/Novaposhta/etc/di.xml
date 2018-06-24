@@ -9,11 +9,11 @@
                             type="Magegain\Novaposhta\Model\City" />
     <preference for="Magegain\Novaposhta\Api\Data\CitySearchResultsInterface"
                             type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Magegain\Novaposhta\Api\WarhouseRepositoryInterface"
-                            type="Magegain\Novaposhta\Model\WarhouseRepository" />
-    <preference for="Magegain\Novaposhta\Api\Data\WarhouseInterface" 
-                            type="Magegain\Novaposhta\Model\Warhouse" />
-    <preference for="Magegain\Novaposhta\Api\Data\WarhouseSearchResultsInterface"
+    <preference for="Magegain\Novaposhta\Api\WarehouseRepositoryInterface"
+                            type="Magegain\Novaposhta\Model\WarehouseRepository" />
+    <preference for="Magegain\Novaposhta\Api\Data\WarehouseInterface"
+                            type="Magegain\Novaposhta\Model\Warehouse" />
+    <preference for="Magegain\Novaposhta\Api\Data\WarehouseSearchResultsInterface"
                             type="Magento\Framework\Api\SearchResults"/>
     <virtualType name="CityGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
@@ -29,16 +29,16 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="warhouseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <virtualType name="warehouseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Magegain\Novaposhta\Model\ResourceModel\Warhouse\Collection</argument>
+            <argument name="collection" xsi:type="object" shared="false">Magegain\Novaposhta\Model\ResourceModel\Warehouse\Collection</argument>
           
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="warhouse_listing_data_source" xsi:type="string">Magegain\Novaposhta\Model\ResourceModel\Warhouse\Collection</item>
+                <item name="warehouse_listing_data_source" xsi:type="string">Magegain\Novaposhta\Model\ResourceModel\Warehouse\Collection</item>
             </argument>
         </arguments>
     </type>
