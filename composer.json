@@ -1,0 +1,17 @@
+{
+    "name": "bxn5/magegain-novaposhta",
+    "description": "Magento 2 novaposhta shipping",
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "Magegain/Novaposhta/registration.php"
+        ],
+        "psr-4": {
+            "Magegain\\Novaposhta\\": "Magegain/Novaposhta/"
+        }
+    }
+}
