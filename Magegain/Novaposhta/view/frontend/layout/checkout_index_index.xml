@@ -18,7 +18,7 @@
                                                     <item name="children" xsi:type="array">
                                                         <item name="shipping-rates-validation" xsi:type="array">
                                                             <item name="children" xsi:type="array">
-                                                                <item name="shipping-rates" xsi:type="array">
+                                                                <item name="newposhta-rates-validation" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Magegain_Novaposhta/js/view/shipping-rates-validation</item>
                                                                 </item>
                                                             </item>
